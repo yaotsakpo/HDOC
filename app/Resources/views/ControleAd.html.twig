@@ -1,0 +1,107 @@
+
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+{% block notification %} 
+
+
+{% for message in app.flashes('notice') %}
+<div class="alert alert-info alert-block"> <a class="close" data-dismiss="alert" href="#">×</a>
+<h4 class="alert-heading">Info!</h4>
+        {{ message }}      
+</div>
+{% endfor %}
+
+
+
+{% endblock %}
+
+
+<center>
+<h3>Controle</h3>
+</center>
+
+
+<div class="row-fluid">
+            <div class="span3">
+                <div class="widget-box">
+
+                <div class="widget-title"><span class="icon"><i class="icon-tasks"></i></span>
+                    <h5>Ajout d'un nouveau Controle</h5>
+
+                </div>
+                <div class="widget-content">
+                    <div class="row-fluid">
+                        <div class="span10">
+
+                        {{ form_start(form,{'attr': {'v':'v' }}) }}
+                        {{ form_widget(form) }}
+                        <br>
+                        <center>
+                            <button type="submit" class="btn btn-primary">valider</button>
+                            <button type="reset" class="btn btn-default">annuler</button></center>
+                        {{ form_end(form) }}
+                        </div>
+                    </div>
+                </div>
+
+                </div>
+            </div>
+
+            <div class="span9">
+                <div class="widget-box">
+
+                <div class="widget-title"><span class="icon"><i class="icon-tasks"></i></span>
+                    <h5>Liste des Controles</h5>
+
+                </div>
+                <div class="widget-content">
+          <table class="table table-bordered data-table">
+                      <thead>
+                            <tr>
+                                <th>Patient</th>
+                                <th>date</th>
+                                <th>heure</th>
+                                <th>Temperature</th>
+                                <th>Tension</th>
+                                <th>Poids</th>
+                                <th>Diagnostic</th>
+                                <th>Observation</th>
+                                <th>Prescriptions</th>
+                                <th>Analyses</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for Controle in Controles %}
+                                <tr>
+                                    <td>{{ Controle.patient.NomPrenom }}</td>
+                                    <td>{{ Controle.date|date('d-m-Y') }}</td>
+                                    <td>{{ Controle.heure|date('H:i') }}</td>
+                                    <td>{{ Controle.Temperature }}</td>
+                                    <td>{{ Controle.Tension }}</td>
+                                    <td>{{ Controle.Poids }}</td>
+                                    <td>{{ Controle.diagnostic }}</td>
+                                    <td>{{ Controle.Observation }}</td>
+                                    <td>{{ Controle.prescription }}</td>
+                                    <td>{{ Controle.analyses }}</td>
+                                    <td>
+                                        <a  href="{{ path('edit_Controle',{'id':Controle.id}) }}"><button class="btn btn-primary" type="submit" ><i class="icon-edit icon-white"></i>Modifier</button></a>
+                                        <a  href="{{ path('supprimer_Controle',{'id':Controle.id}) }}" onclick="return confirm('confirmez?')"><button class="btn btn-danger" type="submit" ><i class="icon-trash icon-white"></i>Supprimer</button></a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+            </table>
+                </div>
+
+                </div>
+            </div>
+
+
+        
+    </div>
+
+{% endblock %}
+

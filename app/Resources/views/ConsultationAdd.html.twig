@@ -1,0 +1,118 @@
+
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+{% block notification %} 
+
+
+{% for message in app.flashes('notice') %}
+<div class="alert alert-info alert-block"> <a class="close" data-dismiss="alert" href="#">×</a>
+<h4 class="alert-heading">Info!</h4>
+        {{ message }}      
+</div>
+{% endfor %}
+
+
+
+{% endblock %}
+
+
+<center>
+<h3>consultation</h3>
+</center>
+
+
+<div class="row-fluid">
+            <div class="span3">
+                <div class="widget-box">
+
+                <div class="widget-title"><span class="icon"><i class="icon-tasks"></i></span>
+                    <h5>Ajout d'une nouvelle consultation</h5>
+
+                </div>
+                <div class="widget-content">
+                    <div class="row-fluid">
+                        <div class="span10">
+
+                        {{ form_start(form,{'attr': {'v':'v' }}) }}
+                        {{ form_widget(form) }}
+                        <br>
+                        <center>
+                            <button type="submit" class="btn btn-primary">valider</button>
+                            <button type="reset" class="btn btn-default">annuler</button></center>
+                        {{ form_end(form) }}
+                        </div>
+                    </div>
+                </div>
+
+                </div>
+            </div>
+
+            <div class="span9">
+                <div class="widget-box">
+
+                <div class="widget-title"><span class="icon"><i class="icon-tasks"></i></span>
+                    <h5>Liste des Consultations</h5>
+
+                </div>
+                <div class="widget-content">
+          <table class="table table-bordered data-table">
+                      <thead>
+                            <tr>
+                                <th>Patient</th>
+                                <th>date</th>
+                                <th>heure</th>
+                                <th>Temperature</th>
+                                <th>Tension</th>
+                                <th>Poids</th>
+                                <th>Diagnostic</th>
+                                <th>Observation</th>
+                                <th>Prescriptions</th>
+                                <th>Analyses</th>
+                                <th>Controle</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for consultation in Consultations %}
+                                <tr>
+                                    <td>{{ consultation.patient.NomPrenom }}</td>
+                                    <td>{{ consultation.date|date('d-m-Y') }}</td>
+                                    <td>{{ consultation.heure|date('H:i') }}</td>
+                                    <td>{{ consultation.Temperature }}</td>
+                                    <td>{{ consultation.Tension }}</td>
+                                    <td>{{ consultation.Poids }}</td>
+                                    <td>{{ consultation.diagnostic }}</td>
+                                    <td>{{ consultation.Observation }}</td>
+                                    <td>{{ consultation.prescription }}</td>
+                                    <td>{{ consultation.analyses }}</td>
+                                    {%if consultation.controle == ''%}
+                                   <td>Non renseigné</td>
+                                    
+                                {%endif%}
+
+                                {%if consultation.controle != ''%}
+                                   <td> {{ consultation.controle|date('d-m-Y') }}</td>
+                                    
+                                {%endif%}
+                                    <td>
+                                        <a  href="{{ path('edit_Consultation',{'id':consultation.id}) }}"><button class="btn btn-primary" type="submit" ><i class="icon-edit icon-white"></i>Modifier</button></a>
+                                        <a  href="{{ path('supprimer_Consultation',{'id':consultation.id}) }}" onclick="return confirm('confirmez?')"><button class="btn btn-danger" type="submit" ><i class="icon-trash icon-white"></i>Supprimer</button></a>
+                                        <a  href="{{ path('Ordonnance',{'id':consultation.id}) }}" target="_blank" onclick="return confirm('confirmez?')" target="_blank"><button class="btn btn-success" type="submit" >Imprimer</button></a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+            </table>
+                </div>
+
+                </div>
+            </div>
+
+
+        
+    </div>
+
+{% endblock %}
+

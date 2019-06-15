@@ -1,0 +1,262 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+<center>
+<h3>Information Patient</h3>
+</center>
+
+    <center>
+        <a  href="{{ path('ajoutConsultation',{'id':malade}) }}"><button class="btn btn-info" type="submit" ><i class="icon-cabinet"></i>Nouvelle Consultation</button></a>
+        <a  href="{{ path('ajoutHospitalisation',{'id':malade}) }}"><button class="btn btn-inverse" type="submit" > <i class="icon-database"></i>Nouvelle Hospitalisation</button></a>
+        <a  href="{{ path('ajoutControle',{'id':malade}) }}"><button class="btn btn-success" type="submit" > <i class="icon-dashboard"></i>Nouveau controle</button></a>
+    </center>
+<br>
+
+
+
+        <center>
+        <table class="table table-bordered ">
+            <thead>
+            <tr>
+                <th>Adresse</th>
+                <th>Telephone</th>
+                <th>Age</th>
+                <th>Sexe</th>
+                <th>Groupe Sanguin</th>
+                <th>Antecedants</th>
+
+            </tr>
+            </thead>
+            <tbody>
+            {% for patient in patients %}
+                {% if patient.id==malade %}
+                <tr>
+                    <td>{{ patient.Adresse }}</td>
+                    <td>{{ patient.Telephone }}</td>
+                    <td>{{ patient.Age}}</td>
+                    <td>{{ patient.Sexe }}</td>
+                    <td>{{ patient.GroupeSanguin }}</td>
+                    <td>{{ patient.antecedant }}</td>
+                </tr>
+            {% endif %}
+            {% endfor %}
+            </tbody>
+
+        </table>
+        </center>
+
+
+
+    <br>
+<div class="widget-box">
+                            <div class="widget-title">
+                                <ul class="nav nav-tabs">
+                                    <li class="active"><a data-toggle="tab" href="#tab1">Hospitalisations</a></li>
+                                    <li><a data-toggle="tab" href="#tab2">Consultations</a></li>
+                                    <li><a data-toggle="tab" href="#tab3">Controles</a></li>
+                                </ul>
+                            </div>
+
+                            <div class="widget-content tab-content">
+                            <div id="tab1" class="tab-pane active">
+                                <div class="widget-title"><span class="icon"><i class="icon-tasks"></i></span>
+
+                                    {% for patient in patients %}
+
+                                        {%if patient.id==malade %}
+
+                                            <h5>Liste des Hospitalisations de M/Mme {{ patient.NomPrenom }}</h5>
+
+                                        {%endif%}
+
+                                    {%endfor%}
+
+                                </div>
+                                <div class="widget-content">
+                                    <table class="table table-bordered data-table">
+                                        <thead>
+                                        <tr>
+                                            <th>Patient</th>
+                                            <th>date d'arrivee</th>
+                                            <th>date de sortie</th>
+                                            <th>Temperature</th>
+                                            <th>Tension</th>
+                                            <th>Poids</th>
+                                            <th>Chambre</th>
+                                            <th>Lit</th>
+                                            <th>Diagnostic</th>
+                                            <th>Traitement</th>
+                                            <th>Analyses</th>
+
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for Hospitalisation in Hospitalisations %}
+                                        {%if Hospitalisation.patient.id==malade %}
+                                            <tr>
+                                                <td>{{ Hospitalisation.patient.NomPrenom }}</td>
+                                                <td>{{ Hospitalisation.entree|date('d-m-Y') }}</td>
+
+                                                {%if Hospitalisation.sortie == ''%}
+                                                    <td> En Hospitalisation</td>
+
+                                                {%endif%}
+
+                                                {%if Hospitalisation.sortie != ''%}
+                                                    <td> {{ Hospitalisation.sortie|date('d-m-Y') }}</td>
+
+                                                {%endif%}
+
+
+
+                                                <td>{{ Hospitalisation.Temperature }}</td>
+                                                <td>{{ Hospitalisation.Tension }}</td>
+                                                <td>{{ Hospitalisation.Poids }}</td>
+                                                <td>{{ Hospitalisation.chambre}}</td>
+                                                <td>{{ Hospitalisation.lit }}</td>
+                                                <td>{{ Hospitalisation.diagnostic }}</td>
+                                                <td>{{ Hospitalisation.Traitement }}</td>
+                                                <td>{{ Hospitalisation.analyse }}</td>
+
+                                            </tr>
+                                            {%endif%}
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+
+                                </div>
+                                
+                            </div>
+
+                            <div id="tab2" class="tab-pane">
+
+
+                                <div class="widget-title"><span class="icon"><i class="icon-tasks"></i></span>
+
+                                    {% for patient in patients %}
+
+                                        {%if patient.id==malade %}
+
+                                            <h5>Liste des Consultations de M/Mme {{ patient.NomPrenom }}</h5>
+
+                                        {%endif%}
+
+                                    {%endfor%}
+
+                                </div>
+                                <div class="widget-content">
+                                    <table class="table table-bordered data-table">
+                                        <thead>
+                                        <tr>
+                                            <th>Patient</th>
+                                            <th>date</th>
+                                            <th>heure</th>
+                                            <th>Temperature</th>
+                                            <th>Tension</th>
+                                            <th>Poids</th>
+                                            <th>Diagnostic</th>
+                                            <th>Observation</th>
+                                            <th>Prescriptions</th>
+                                            <th>Analyses</th>
+                                            <th>Controle</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for consultation in Consultations %}
+                                        {% if consultation.patient.id==malade%}
+                                            <tr>
+                                                <td>{{ consultation.patient.NomPrenom }}</td>
+                                                <td>{{ consultation.date|date('d-m-Y') }}</td>
+                                                <td>{{ consultation.heure|date('H:i') }}</td>
+                                                <td>{{ consultation.Temperature }}</td>
+                                                <td>{{ consultation.Tension }}</td>
+                                                <td>{{ consultation.Poids }}</td>
+                                                <td>{{ consultation.diagnostic }}</td>
+                                                <td>{{ consultation.Observation }}</td>
+                                                <td>{{ consultation.prescription }}</td>
+                                                <td>{{ consultation.analyses }}</td>
+                                                 {%if consultation.controle == ''%}
+                                   <td>Non renseigné</td>
+                                    
+                                {%endif%}
+
+                                {%if consultation.controle != ''%}
+                                   <td> {{ consultation.controle|date('d-m-Y') }}</td>
+                                    
+                                {%endif%}
+                                            </tr>
+                                            {% endif %}
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+
+                                </div>
+                                
+                            </div>
+
+                            <div id="tab3" class="tab-pane">
+
+
+                                <div class="widget-title"><span class="icon"><i class="icon-tasks"></i></span>
+
+                                    {% for patient in patients %}
+
+                                        {%if patient.id==malade %}
+
+                                            <h5>Liste des Controles de M/Mme {{ patient.NomPrenom }}</h5>
+
+                                        {%endif%}
+
+                                    {%endfor%}
+
+                                </div>
+                                <div class="widget-content">
+                                   
+                                    <table class="table table-bordered data-table">
+                                    <thead>
+                                    <tr>
+                                        <th>Patient</th>
+                                        <th>date</th>
+                                        <th>heure</th>
+                                        <th>Temperature</th>
+                                        <th>Tension</th>
+                                        <th>Poids</th>
+                                        <th>Diagnostic</th>
+                                        <th>Observation</th>
+                                        <th>Prescriptions</th>
+                                        <th>Analyses</th>
+                                      
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for Controle in Controles %}
+                                     {% if Controle.patient.id==malade%}
+                                        <tr>
+                                            <td>{{ Controle.patient.NomPrenom }}</td>
+                                            <td>{{ Controle.date|date('d-m-Y') }}</td>
+                                            <td>{{ Controle.heure|date('H:i') }}</td>
+                                            <td>{{ Controle.Temperature }}</td>
+                                            <td>{{ Controle.Tension }}</td>
+                                            <td>{{ Controle.Poids }}</td>
+                                            <td>{{ Controle.diagnostic }}</td>
+                                            <td>{{ Controle.Observation }}</td>
+                                            <td>{{ Controle.prescription }}</td>
+                                            <td>{{ Controle.analyses }}</td>
+                                        </tr>
+                                        {% endif %}
+                                    {% endfor %}
+                                    </tbody>
+                                    </table>
+
+                                </div>
+                                
+                            </div>
+
+                             
+                            </div>                            
+</div>
+
+             
+
+{% endblock %}

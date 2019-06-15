@@ -1,0 +1,108 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    {% block notification %}
+
+
+        {% for message in app.flashes('notice') %}
+            <div class="alert alert-info alert-block"> <a class="close" data-dismiss="alert" href="#">×</a>
+                <h4 class="alert-heading">Info!</h4>
+                {{ message }}
+            </div>
+        {% endfor %}
+
+
+
+    {% endblock %}
+
+
+<center>
+<h3>Patient</h3>
+</center>
+
+
+    <div class="row-fluid">
+            <div class="span3">
+                <div class="widget-box">
+
+                <div class="widget-title"><span class="icon"><i class="icon-tasks"></i></span>
+                    <h5>Ajout d'un Nouveau Patient</h5>
+
+                </div>
+                <div class="widget-content">
+                    <div class="row-fluid">
+                        <div class="span10">
+
+                        {{ form_start(form,{'attr': {'v':'v' }}) }}
+                        {{ form_widget(form) }}
+                        <br>
+                        <center>
+                            <button type="submit" class="btn btn-primary">valider</button>
+                            <button type="reset" class="btn btn-default">annuler</button></center>
+                        {{ form_end(form) }}
+                        </div>
+                    </div>
+                </div>
+
+                </div>
+            </div>
+
+    <center>
+        <a  href="{{ path('ajoutConsultation',{'id':malade}) }}"><button class="btn btn-info" type="submit" ><i class="icon-cabinet"></i>Nouvelle Consultation</button></a>
+        <a  href="{{ path('ajoutHospitalisation',{'id':malade}) }}"><button class="btn btn-inverse" type="submit" > <i class="icon-database"></i>Nouvelle Hospitalisation</button></a>
+    </center>
+<br>
+
+            <div class="span9">
+                <div class="widget-box">
+
+                <div class="widget-title"><span class="icon"><i class="icon-tasks"></i></span>
+                    <h5>Liste des patients</h5>
+
+                </div>
+                <div class="widget-content">
+          <table class="table table-bordered data-table">
+                      <thead>
+                            <tr>
+                                <th>Patient</th>
+                                <th>Adresse</th>
+                                <th>Telephone</th>
+                                <th>Age</th>
+                                <th>Sexe</th>
+                                <th>Groupe Sanguin</th>
+                                <th>Antecedants</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for patient in patients %}
+                                <tr>
+                                    <td>{{ patient.NomPrenom }}</td>
+                                    <td>{{ patient.Adresse }}</td>
+                                    <td>{{ patient.Telephone }}</td>
+                                    <td>{{ patient.Age}}</td>
+                                    <td>{{ patient.Sexe }}</td>
+                                    <td>{{ patient.GroupeSanguin }}</td>
+                                    <td>{{ patient.antecedant }}</td>
+                                    <td>
+                                        <a  href="{{ path('edit_patient',{'id':patient.id}) }}"><button class="btn btn-primary" type="submit" ><i class="icon-edit icon-white"></i>Modifier</button></a>
+
+                                        <a  href="{{ path('supprimer_patient',{'id':patient.id}) }}" onclick="return confirm('confirmez?')"><button class="btn btn-danger" type="submit" ><i class="icon-trash icon-white"></i>Supprimer</button></a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+            </table>
+                </div>
+
+                </div>
+            </div>
+
+
+        
+    </div>
+
+
+{% endblock %}
+

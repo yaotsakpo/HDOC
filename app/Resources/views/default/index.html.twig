@@ -1,0 +1,173 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+
+<center>
+<h3>Acceuil</h3>
+</center>
+
+<div class="row-fluid">
+       
+            <div class="span12">
+                <div class="widget-box">
+
+                <div class="widget-title"><span class="icon"><i class="icon-tasks"></i></span>
+                    <h5>Liste des Rendez-vous du jour</h5>
+
+                </div>
+                <div class="widget-content">
+                <table class="table table-bordered data-table">
+                      <thead>
+                            <tr>
+                                <th>Patient</th>
+                                <th>Telephone</th>
+                                <th>Date</th>
+                                <th>Heure</th>
+                                <th>Motif</th>
+                                <th>Etat</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for Rdv in Rdvs %}
+
+                            {%if (Rdv.Date|date('d-m-Y')) == (today|date('d-m-Y')) and Rdv.etat==0 %}
+                                <tr>
+                                   
+                                    <td>{{ Rdv.patient.nomPrenom }}</td>
+                                    <td>{{ Rdv.patient.Telephone }}</td>  
+                                    <td>{{ Rdv.Date|date('d-m-Y') }}</td>
+                                    <td>{{ Rdv.heure|date('H:i') }}</td>
+                                    <td>{{ Rdv.Motif }}</td>
+                                    {% if  Rdv.Date>today %}
+                                    <td>En Attente</td>
+                                    {% else %}
+                                            {% if Rdv.Date|date('d-m-Y')==today|date('d-m-Y') %}
+                                                {% if Rdv.heure|date('H:i')>today|date('H:i')  %}
+                                                    <td>En Attente</td>
+                                                {% else %}
+                                                    {% if  Rdv.etat==0 %}
+                                                        <td>Rate</td>
+                                                        {% else %}
+                                                            {% if Rdv.etat==1 %}
+                                                                <td>Honnore</td>
+                                                            {% endif %}
+                                                    {% endif %}
+                                                {% endif %}
+                                                {% else %}
+                                                {% if Rdv.Date<today %}
+                                                    {% if  Rdv.etat==0 %}
+                                                        <td>Rate</td>
+                                                    {% else %}
+                                                        {% if Rdv.etat==1 %}
+                                                            <td>Honnore</td>
+                                                        {% endif %}
+                                                    {% endif %}
+                                                    {% endif %}
+                                            {% endif %}
+                                    {% endif %}
+                                    <td>
+
+                                        <a  href="{{ path('supprimer_Rdv',{'id':Rdv.id}) }}" onclick="return confirm('confirmez?')"><button class="btn btn-danger" type="submit" ><i class="icon-trash icon-white"></i>Supprimer</button></a>
+
+                                            {% if  Rdv.etat==0 %}
+                                                    
+                                        <a  href="{{ path('edit_Rdv',{'id':Rdv.id}) }}" ><button class="btn btn-info" type="submit" ><i class="icon-edit icon-white"></i>Modifier</button></a>
+
+                                        
+                                        <a href="{{ path('edit_Rdv',{'id':Rdv.id}) }}"><button class="btn btn-primary" type="submit" ><i class="icon-edit icon-white"></i>Reporter</button></a>
+
+                                        {% if today|date('H:i') >= Rdv.heure|date('H:i') %}
+                                        <a  href="{{ path('valide',{'id':Rdv.id}) }}" onclick="return confirm('confirmez?')"><button class="btn btn-success" type="submit" ><i class="icon-ok"></i>Valider</button></a>
+                                        {% endif %}
+                                                {% endif %}
+
+                                        <a  href="{{ path('ajoutConsultation',{'id':Rdv.patient.id}) }}"><button class="btn btn-info" type="submit" ><i class="icon-cabinet"></i>Nouvelle Consultation</button></a>
+        <a  href="{{ path('ajoutHospitalisation',{'id':Rdv.patient.id}) }}"><button class="btn btn-inverse" type="submit" > <i class="icon-database"></i>Nouvelle Hospitalisation</button></a>
+                                    </td>
+                                </tr>
+                                {%endif%}
+                            {% endfor %}
+                            </tbody>
+                </table>
+                </div>
+
+                </div>
+            </div>
+
+
+        
+</div>
+
+
+<div class="row-fluid">
+       
+            <div class="span12">
+                <div class="widget-box">
+
+                <div class="widget-title"><span class="icon"><i class="icon-tasks"></i></span>
+                    <h5>Liste des Controles du jour</h5>
+
+                </div>
+                <div class="widget-content">
+               <table class="table table-bordered data-table">
+                      <thead>
+                            <tr>
+                                <th>Patient</th>
+                                <th>date</th>
+                                <th>heure</th>
+                                <th>Temperature</th>
+                                <th>Tension</th>
+                                <th>Poids</th>
+                                <th>Controle</th>
+                                <th>Observation</th>
+                                <th>Prescriptions</th>
+                                <th>Analyses</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for consultation in Consultations %}
+                                {%if (consultation.controle != '') and (consultation.controle|date('d-m-Y')==(today|date('d-m-Y') ) )%}
+                                <tr>
+                                    <td>{{ consultation.patient.NomPrenom }}</td>
+                                    <td>{{ consultation.date|date('d-m-Y') }}</td>
+                                    <td>{{ consultation.heure|date('H:i') }}</td>
+                                    <td>{{ consultation.Temperature }}</td>
+                                    <td>{{ consultation.Tension }}</td>
+                                    <td>{{ consultation.Poids }}</td>
+
+                                      {%if consultation.controle == ''%}
+                                   <td>Non renseigné</td>
+                                    
+                                {%endif%}
+
+                                {%if consultation.controle != ''%}
+                                   <td> {{ consultation.controle|date('d-m-Y') }}</td>
+                                    
+                                {%endif%}
+
+                                    <td>{{ consultation.Observation }}</td>
+                                    <td>{{ consultation.prescription }}</td>
+                                    <td>{{ consultation.analyses }}</td>
+                                    <td>
+                                        <a  href="{{ path('edit_Consultation',{'id':consultation.id}) }}"><button class="btn btn-primary" type="submit" ><i class="icon-edit icon-white"></i>Reporter</button></a>
+                                      
+                                    </td>
+                                </tr>
+                                {%endif%}
+                            {% endfor %}
+                            </tbody>
+            </table>
+                </div>
+
+                </div>
+            </div>
+
+
+        
+</div>
+
+
+{% endblock %}

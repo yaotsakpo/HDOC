@@ -1,0 +1,158 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    {% block notification %}
+
+
+        {% for message in app.flashes('notice') %}
+            <div class="alert alert-info alert-block"> <a class="close" data-dismiss="alert" href="#">×</a>
+                <h4 class="alert-heading">Info!</h4>
+                {{ message }}
+            </div>
+        {% endfor %}
+
+
+
+    {% endblock %}
+
+<center>
+<h3>Rendez-vous</h3>
+</center>
+
+
+    <div class="row-fluid">
+            <div class="span3">
+                <div class="widget-box">
+
+                <div class="widget-title"><span class="icon"><i class="icon-tasks"></i></span>
+                    <h5>Ajout d'un nouveau rendez-vous</h5>
+
+                </div>
+                <div class="widget-content">
+                    <div class="row-fluid">
+                        <div class="span10">
+
+                        {{ form_start(form,{'attr': {'v':'v' }}) }}
+                        {{ form_widget(form) }}
+                        <br>
+                        <center>
+                            <button type="submit" class="btn btn-primary">valider</button>
+                            <button type="reset" class="btn btn-default">annuler</button></center>
+                        {{ form_end(form) }}
+                        </div>
+                    </div>
+                </div>
+
+                </div>
+            </div>
+
+            <div class="span9">
+                <div class="widget-box">
+
+                <div class="widget-title"><span class="icon"><i class="icon-tasks"></i></span>
+                    <h5>Liste des Rendez-vous</h5>
+
+                </div>
+                <div class="widget-content">
+             <table class="table table-bordered data-table">
+                      <thead>
+                            <tr>
+                                <th>Patient</th>
+                                <th>Telephone</th>
+                                <th>Date</th>
+                                <th>Heure</th>
+                                <th>Motif</th>
+                                <th>Etat</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for Rdv in Rdvs %}
+                                <tr>
+                                   
+                                    <td>{{ Rdv.patient.nomPrenom }}</td>
+                                    <td>{{ Rdv.patient.Telephone }}</td>  
+                                    <td>{{ Rdv.Date|date('d-m-Y') }}</td>
+                                    {% if Rdv.heure==null %}
+                                    <td>non renseigne</td>
+                                     {% endif %}
+                                     {% if Rdv.heure!=null %}
+                                        <td>{{Rdv.heure|date('H:i')}}</td>
+                                    {% endif %}
+                                    <td>{{ Rdv.Motif }}</td>
+                                    
+                                    {% if  Rdv.Date>today %}
+                                    <td>En Attente</td>
+                                    {% else %}
+
+                                    
+
+                                            {% if Rdv.Date|date('d-m-Y')==today|date('d-m-Y') %}
+
+                                                {% if Rdv.heure|date('H:i')>today|date('H:i')  %}
+                                                    <td>En Attente</td>
+                                                {% else %}
+                                                    {% if  Rdv.etat==0 %}
+                                                        <td>Rate</td>
+                                                        {% else %}
+                                                            {% if Rdv.etat==1 %}
+                                                                <td>Honnore</td>
+                                                            {% endif %}
+                                                    {% endif %}
+                                                {% endif %}
+                                                {% else %}
+
+                                                {% if Rdv.Date<today %}
+                                                        {% if  Rdv.etat==0 %}
+                                                            <td>Rate</td>
+                                                        {% else %}
+                                                                {% if Rdv.etat==1 %}
+                                                                    <td>Honnore</td>
+                                                                {% endif %}
+                                                        {% endif %}
+                                                {% endif %}
+                                            {% endif %}
+                                            
+
+                                    {% endif %}
+                                    <td>
+
+                                        <a  href="{{ path('supprimer_Rdv',{'id':Rdv.id}) }}" onclick="return confirm('confirmez?')"><button class="btn btn-danger" type="submit" ><i class="icon-trash icon-white"></i>Supprimer</button></a>
+
+
+                                                {% if  Rdv.etat==0 %}
+                                                    
+
+                                        <a  href="{{ path('edit_Rdv',{'id':Rdv.id}) }}" ><button class="btn btn-info" type="submit" ><i class="icon-edit icon-white"></i>Modifier</button></a>
+
+                                        
+                                         <a href="{{ path('edit_Rdv',{'id':Rdv.id}) }}">
+                                         <button class="btn btn-primary" type="submit" ><i class="icon-edit icon-white"></i>Reporter</button>
+                                         </a>
+
+                                        {% if today|date('H:i') >= Rdv.heure|date('H:i') %}
+                                            {% if today|date('d-m-Y') >= Rdv.date|date('d-m-Y') %}
+                                        <a  href="{{ path('valider',{'id':Rdv.id}) }}" onclick="return confirm('confirmez?')">
+                                        <button class="btn btn-success" type="submit" ><i class="icon-ok"></i>Valider</button></a>
+                                             {% endif %}
+                                        {% endif %}
+
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                </table>
+                </div>
+
+                </div>
+            </div>
+
+
+        
+    </div>
+
+
+{% endblock %}
+

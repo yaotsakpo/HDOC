@@ -1,0 +1,125 @@
+
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    {% block notification %}
+
+
+        {% for message in app.flashes('notice') %}
+            <div class="alert alert-info alert-block"> <a class="close" data-dismiss="alert" href="#">×</a>
+                <h4 class="alert-heading">Info!</h4>
+                {{ message }}
+            </div>
+        {% endfor %}
+
+
+
+    {% endblock %}
+
+
+
+<center>
+<h3>Hospitalisation</h3>
+</center>
+
+
+    <div class="row-fluid">
+        <div class="span3">
+            <div class="widget-box">
+
+                <div class="widget-title"><span class="icon"><i class="icon-tasks"></i></span>
+                    <h5>Ajout d'une nouvelle Hospitalisation</h5>
+
+                </div>
+                <div class="widget-content">
+                    <div class="row-fluid">
+                        <div class="span10">
+
+                            {{ form_start(form,{'attr': {'v':'v' }}) }}
+                            {{ form_widget(form) }}
+                            <br>
+                            <center>
+                                <button type="submit" class="btn btn-primary">valider</button>
+                                <button type="reset" class="btn btn-default">annuler</button></center>
+                            {{ form_end(form) }}
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="span9">
+            <div class="widget-box">
+
+                <div class="widget-title"><span class="icon"><i class="icon-tasks"></i></span>
+                    <h5>Liste des Hospitalisations</h5>
+
+                </div>
+                <div class="widget-content">
+                    <table class="table table-bordered data-table">
+                        <thead>
+                        <tr>
+                            <th>Patient</th>
+                            <th>date d'arrivee</th>
+                            <th>date de sortie</th>
+                            <th>Temperature</th>
+                            <th>Tension</th>
+                            <th>Poids</th>
+                            <th>Chambre</th>
+                            <th>Lit</th>
+                            <th>Diagnostic</th>
+                            <th>Traitement</th>
+                            <th>Analyses</th>
+                            <th>Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for Hospitalisation in Hospitalisations %}
+                            <tr>
+                                <td>{{ Hospitalisation.patient.NomPrenom }}</td>
+                                <td>{{ Hospitalisation.entree|date('d-m-Y') }}</td>
+
+                                 {%if Hospitalisation.sortie == ''%}
+                                   <td> En Hospitalisation</td>
+                                    
+                                {%endif%}
+
+                                {%if Hospitalisation.sortie != ''%}
+                                   <td> {{ Hospitalisation.sortie|date('d-m-Y') }}</td>
+                                    
+                                {%endif%}
+
+
+                                
+                                <td>{{ Hospitalisation.Temperature }}</td>
+                                <td>{{ Hospitalisation.Tension }}</td>
+                                <td>{{ Hospitalisation.Poids }}</td>
+                                <td>{{ Hospitalisation.chambre}}</td>
+                                <td>{{ Hospitalisation.lit }}</td>
+                                <td>{{ Hospitalisation.diagnostic }}</td>
+                                <td>{{ Hospitalisation.Traitement }}</td>
+                                <td>{{ Hospitalisation.analyse }}</td>
+                                <td>
+                                    <a  href="{{ path('edit_Hospitalisation',{'id':Hospitalisation.id}) }}"><button class="btn btn-primary" type="submit" ><i class="icon-edit icon-white"></i>Modifier</button></a>
+                                    <a  href="{{ path('supprimer_Hospitalisation',{'id':Hospitalisation.id}) }}" onclick="return confirm('confirmez?')"><button class="btn btn-danger" type="submit" ><i class="icon-trash icon-white"></i>Supprimer</button></a>
+                                    {%if Hospitalisation.sortie == ''%}
+                                    <a  href="{{ path('sorti',{'id':Hospitalisation.id}) }}" onclick="return confirm('confirmez?')"><button class="btn btn-success" type="submit" ><i class="icon-edit icon-white"></i>valider</button></a>
+                                    {%endif%}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+
+
+
+    </div>
+
+{% endblock %}
+
